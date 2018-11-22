@@ -23,4 +23,5 @@
 hs_err_pid*
 
 .idea/*
-src/main/resources/assets/*
+*/target/*
+resources/src/main/resources/*
