@@ -2,11 +2,8 @@ package com.friendos.gui;
 
 import com.friendos.resources.ResourceLoader;
 import com.google.common.base.MoreObjects;
-import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 
 import java.net.URL;
 
@@ -19,14 +16,6 @@ abstract class AbstractScene<T> {
 
     AbstractScene(int x, int y, int w, int h) {
         dimensions = new Rectangle2D(x, y, w, h);
-    }
-
-    /**
-     * Defining an interface for onClickHandlers so we can simplify the act
-     * of mapping Label texts with the actions to be performed when clicked.
-     */
-    protected interface OnClickHandler {
-        EventHandler<MouseEvent> onClick(Stage stage);
     }
 
     /**
