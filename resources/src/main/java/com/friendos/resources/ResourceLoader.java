@@ -1,9 +1,7 @@
 package com.friendos.resources;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -12,8 +10,10 @@ import java.util.logging.Logger;
 public class ResourceLoader {
 
     private static final Logger LOGGER = Logger.getLogger(ResourceLoader.class.getName());
-    private static final String IMAGE_PATH = "images/";
     private static final String AUDIO_PATH = "audio/";
+    private static final String FONT_PATH = "fonts/";
+    private static final String IMAGE_PATH = "images/";
+    private static final String STYLESHEET_PATH = "stylesheets/";
     private static ResourceLoader resourceLoader = null;
 
     private ResourceLoader() {}
@@ -30,7 +30,7 @@ public class ResourceLoader {
      * @param resourcePath the path to the resource
      * @return the InputStream to the requested resource.
      */
-    public InputStream getResourceStream(String resourcePath) {
+    private InputStream getResourceStream(String resourcePath) {
         InputStream resourceStream = this.getClass().getClassLoader().getResourceAsStream(resourcePath);
 
         if (resourceStream == null) {
@@ -38,14 +38,6 @@ public class ResourceLoader {
         }
 
         return resourceStream;
-    }
-
-    /**
-     * @param imagePath the path to the image
-     * @return the InputStream to the requested resource.
-     */
-    public InputStream getImageStream(String imagePath) {
-        return getResourceStream(IMAGE_PATH + imagePath);
     }
 
     /**
@@ -57,10 +49,34 @@ public class ResourceLoader {
     }
 
     /**
+     * @param fontPath the path to the image
+     * @return the InputStream to the requested resource.
+     */
+    public InputStream getFontStream(String fontPath) {
+        return getResourceStream(FONT_PATH + fontPath);
+    }
+
+    /**
+     * @param imagePath the path to the image
+     * @return the InputStream to the requested resource.
+     */
+    public InputStream getImageStream(String imagePath) {
+        return getResourceStream(IMAGE_PATH + imagePath);
+    }
+
+    /**
+     * @param stylesheetPath the path to the image
+     * @return the InputStream to the requested resource.
+     */
+    public InputStream getStylesheetStream(String stylesheetPath) {
+        return getResourceStream(STYLESHEET_PATH + stylesheetPath);
+    }
+
+    /**
      * @param resourcePath the path to the resource
      * @return the URL to the requested resource.
      */
-    public URL getResourceURL(String resourcePath) {
+    private URL getResourceURL(String resourcePath) {
         URL resource = this.getClass().getClassLoader().getResource(resourcePath);
 
         if (resource == null) {
@@ -68,6 +84,22 @@ public class ResourceLoader {
         }
 
         return resource;
+    }
+
+    /**
+     * @param audioPath the path to the image
+     * @return the URL to the requested resource.
+     */
+    public URL getAudioURL(String audioPath) {
+        return getResourceURL(AUDIO_PATH + audioPath);
+    }
+
+    /**
+     * @param fontPath the path to the image
+     * @return the URL to the requested resource.
+     */
+    public URL getFontURL(String fontPath) {
+        return getResourceURL(FONT_PATH + fontPath);
     }
 
     /**
@@ -79,10 +111,10 @@ public class ResourceLoader {
     }
 
     /**
-     * @param audioPath the path to the image
+     * @param stylesheetPath the path to the image
      * @return the URL to the requested resource.
      */
-    public URL getAudioURL(String audioPath) {
-        return getResourceURL(AUDIO_PATH + audioPath);
+    public URL getStylesheetURL(String stylesheetPath) {
+        return getResourceURL(STYLESHEET_PATH + stylesheetPath);
     }
 }

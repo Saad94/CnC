@@ -1,32 +1,32 @@
 package com.friendos.gui;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
-import java.net.URL;
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import static com.friendos.gui.GUIMain.stage;
 
 class MainMenuScene extends AbstractScene<MainMenuScene> {
 
     /**
      * The OnClickHandler for the startNewGame button.
      */
-    private OnClickHandler startNewGame = stage -> mouseEvent -> System.out.println("This should start the game.");
+    private EventHandler<MouseEvent> startNewGame = mouseEvent -> System.out.println("This should start the game.");
 
     /**
      * The OnClickHandler for the loadMission button.
      */
-    private OnClickHandler loadMission = stage -> mouseEvent -> {
+    private EventHandler<MouseEvent> loadMission = mouseEvent -> {
         System.out.println("This should load a mission.");
         GUIMain.setCurrentScene(GUIMain.pokemonScene);
     };
@@ -34,17 +34,17 @@ class MainMenuScene extends AbstractScene<MainMenuScene> {
     /**
      * The OnClickHandler for the multiplayerGame button.
      */
-    private OnClickHandler multiplayerGame = stage -> mouseEvent -> System.out.println("This should start a multiplayer game.");
+    private EventHandler<MouseEvent> multiplayerGame = mouseEvent -> System.out.println("This should start a multiplayer game.");
 
     /**
      * The OnClickHandler for the exit button.
      */
-    private OnClickHandler exit = stage -> mouseEvent -> stage.close();
+    private EventHandler<MouseEvent> exit = mouseEvent -> stage.close();
 
     /**
      * A map between Label text and Label actions.
      */
-    private final List<Map.Entry<String, OnClickHandler>> LABELS = Arrays.asList(
+    private final List<Map.Entry<String, EventHandler<MouseEvent>>> LABELS = Arrays.asList(
             new AbstractMap.SimpleEntry<>("Testing: do nothing", startNewGame),
             new AbstractMap.SimpleEntry<>("Testing: display pokemon", loadMission),
             new AbstractMap.SimpleEntry<>("Testing: do nothing", multiplayerGame),
@@ -53,9 +53,8 @@ class MainMenuScene extends AbstractScene<MainMenuScene> {
 
     /**
      * The constructor for this class.
-     * @param stage the stage on which this Scene will be displayed.
      */
-    MainMenuScene(Stage stage) {
+    MainMenuScene() {
         super(0, 0, 1024, 640);
 
         // Set the objects in this Scene.
@@ -63,7 +62,7 @@ class MainMenuScene extends AbstractScene<MainMenuScene> {
         setScene(new Scene(grid, getDimensions().getWidth(), getDimensions().getHeight()));
 
         // Set the stylesheet for this Scene.
-        getScene().getStylesheets().add(RESOURCE_LOADER.getResourceURL("stylesheets/main_menu.css").toExternalForm());
+        getScene().getStylesheets().add(RESOURCE_LOADER.getStylesheetURL("main_menu.css").toExternalForm());
 
         // Set the music file for this Scene.
         setMusic("sounds/Born To Be A Winner.wav");
@@ -91,7 +90,7 @@ class MainMenuScene extends AbstractScene<MainMenuScene> {
     private void createLabels(Stage stage, GridPane gridPane) {
         for (int i = 0; i < LABELS.size(); i++) {
             Label label = new Label(LABELS.get(i).getKey());
-            label.setOnMouseClicked(LABELS.get(i).getValue().onClick(stage));
+            label.setOnMouseClicked(LABELS.get(i).getValue());
             label.setPrefSize(getDimensions().getWidth()/3, getDimensions().getHeight()/20);
             gridPane.add(label, 0, i+1);
         }

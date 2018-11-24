@@ -26,8 +26,8 @@ public class GUIMain extends Application {
         setupStage(primaryStage);
 
         // Create all the Scenes
-        mainMenuScene = new MainMenuScene(stage);
-        pokemonScene = new TestPokemonScene(stage);
+        mainMenuScene = new MainMenuScene();
+        pokemonScene = new TestPokemonScene();
 
         // Set the current Scene
         setCurrentScene(mainMenuScene);
