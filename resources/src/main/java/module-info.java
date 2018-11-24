@@ -1,4 +1,5 @@
 open module resources {
-    requires java.logging;
+    requires transitive java.logging;
+    requires transitive com.google.common;
     exports com.friendos.resources;
 }

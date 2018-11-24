@@ -1,7 +1,6 @@
 module gui {
-    requires java.logging;
     requires core;
-    requires resources;
     requires javafx.controls;
+    requires javafx.media;
     opens com.friendos.gui to javafx.graphics;
 }

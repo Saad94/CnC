@@ -1,61 +1,19 @@
 package com.friendos.gui;
 
-import com.friendos.resources.ResourceLoader;
 import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
+import javafx.application.Platform;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-
-import java.util.*;
 
 public class GUIMain extends Application {
 
-    private final ResourceLoader RESOURCE_LOADER = ResourceLoader.getInstance();
-    private final Rectangle2D DIMENSIONS = new Rectangle2D(0, 0, 1024, 640);
+    static Stage stage;
+    static MainMenuScene mainMenuScene;
+    static TestPokemonScene pokemonScene;
+    static AbstractScene currentScene;
 
-    /**
-     * Defining an interface for onClickHandlers so we can simplify the act
-     * of mapping Label texts with the actions to be performed when clicked.
-     */
-    private interface OnClickHandler {
-        EventHandler<MouseEvent> onClick(Stage stage);
-    }
-
-    /**
-     * The OnClickHandler for the startNewGame button.
-     */
-    private OnClickHandler startNewGame = stage -> mouseEvent -> System.out.println("This should start the game.");
-
-    /**
-     * The OnClickHandler for the loadMission button.
-     */
-    private OnClickHandler loadMission = stage -> mouseEvent -> System.out.println("This should load a mission.");
-
-    /**
-     * The OnClickHandler for the multiplayerGame button.
-     */
-    private OnClickHandler multiplayerGame = stage -> mouseEvent -> System.out.println("This should start a multiplayer game.");
-
-    /**
-     * The OnClickHandler for the exit button.
-     */
-    private OnClickHandler exit = stage -> mouseEvent -> stage.close();
-
-    /**
-     * A map between Label text and Label actions.
-     */
-    private final List<Map.Entry<String, OnClickHandler>> LABELS = Arrays.asList(
-            new AbstractMap.SimpleEntry<>("Start New Game", startNewGame),
-            new AbstractMap.SimpleEntry<>("Load Mission", loadMission),
-            new AbstractMap.SimpleEntry<>("Multiplayer Game", multiplayerGame),
-            new AbstractMap.SimpleEntry<>("Exit", exit)
-    );
+    static MediaPlayer mediaPlayer;
 
     public static void main(String[] args){
         Application.launch(args);
@@ -63,24 +21,56 @@ public class GUIMain extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        GridPane grid = new GridPane();
-        Scene scene = new Scene(grid, DIMENSIONS.getWidth(), DIMENSIONS.getHeight());
-        scene.getStylesheets().add(RESOURCE_LOADER.getResourceURL("stylesheets/main_menu.css").toExternalForm());
 
-        grid.setAlignment(Pos.TOP_CENTER);
-        grid.setHgap(10);
-        grid.setVgap(20);
-        grid.setPadding(new Insets(75, 25, 25, 25));
+        // Setup the Stage
+        setupStage(primaryStage);
 
-        for (int i = 0; i < LABELS.size(); i++) {
-            Label label = new Label(LABELS.get(i).getKey());
-            label.setOnMouseClicked(LABELS.get(i).getValue().onClick(primaryStage));
-            label.setPrefSize(DIMENSIONS.getWidth()/3, DIMENSIONS.getHeight()/20);
-            grid.add(label, 0, i+1);
+        // Create all the Scenes
+        mainMenuScene = new MainMenuScene(stage);
+        pokemonScene = new TestPokemonScene(stage);
+
+        // Set the current Scene
+        setCurrentScene(mainMenuScene);
+
+        stage.setTitle("JavaFX on JDK 11");
+        stage.show();
+    }
+
+    private void setupStage(Stage primaryStage) {
+
+        // Store the Stage so we can access it later.
+        stage = primaryStage;
+
+        // If the game window is closed, terminate the application.
+        stage.setOnCloseRequest(event -> Platform.exit());
+    }
+
+    /**
+     * Changes the current running Scene.
+     * @param abstractScene the new Scene to be displayed.
+     */
+    static void setCurrentScene(AbstractScene abstractScene) {
+        currentScene = abstractScene;
+
+        // Sets the music for the new currentScene to play.
+        changeMediaPlayer();
+
+        // Displays the new currentScene on the Stage.
+        stage.setScene(currentScene.getScene());
+    }
+
+    /**
+     * Setup the MediaPlayer to stop playing whatever it already
+     * is and instead play the music from the currentScene.
+     */
+    private static void changeMediaPlayer() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
         }
 
-        primaryStage.setTitle("JavaFX on JDK 11");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        mediaPlayer = new MediaPlayer(new Media(currentScene.getMusic().toString()));
+        mediaPlayer.setVolume(0.8);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.play();
     }
 }

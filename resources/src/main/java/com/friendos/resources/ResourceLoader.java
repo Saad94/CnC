@@ -31,7 +31,13 @@ public class ResourceLoader {
      * @return the InputStream to the requested resource.
      */
     public InputStream getResourceStream(String resourcePath) {
-        return this.getClass().getClassLoader().getResourceAsStream(resourcePath);
+        InputStream resourceStream = this.getClass().getClassLoader().getResourceAsStream(resourcePath);
+
+        if (resourceStream == null) {
+            throw new ResourceNotFoundException(String.format("The Resource at <%s> couldn't be found.", resourcePath));
+        }
+
+        return resourceStream;
     }
 
     /**
@@ -55,7 +61,13 @@ public class ResourceLoader {
      * @return the URL to the requested resource.
      */
     public URL getResourceURL(String resourcePath) {
-        return this.getClass().getClassLoader().getResource(resourcePath);
+        URL resource = this.getClass().getClassLoader().getResource(resourcePath);
+
+        if (resource == null) {
+            throw new ResourceNotFoundException(String.format("The Resource at <%s> couldn't be found.", resourcePath));
+        }
+
+        return resource;
     }
 
     /**

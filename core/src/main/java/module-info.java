@@ -1,4 +1,4 @@
 module core {
-    requires java.logging;
+    requires transitive models;
     exports com.friendos.core;
 }
