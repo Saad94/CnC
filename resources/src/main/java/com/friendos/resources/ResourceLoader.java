@@ -2,6 +2,7 @@ package com.friendos.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,10 +11,10 @@ import java.util.logging.Logger;
  */
 public class ResourceLoader {
 
-    private static Logger LOGGER = Logger.getLogger(ResourceLoader.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ResourceLoader.class.getName());
+    private static final String IMAGE_PATH = "images/";
+    private static final String AUDIO_PATH = "audio/";
     private static ResourceLoader resourceLoader = null;
-    private static String IMAGE_PATH = "images/";
-    private static String AUDIO_PATH = "audio/";
 
     private ResourceLoader() {}
 
@@ -29,28 +30,47 @@ public class ResourceLoader {
      * @param resourcePath the path to the resource
      * @return the InputStream to the requested resource.
      */
-    public InputStream getResource(String resourcePath) {
-        try {
-            return this.getClass().getModule().getResourceAsStream(resourcePath);
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "The requested resource couldn't be found", e);
-            return null;
-        }
+    public InputStream getResourceStream(String resourcePath) {
+        return this.getClass().getClassLoader().getResourceAsStream(resourcePath);
     }
 
     /**
      * @param imagePath the path to the image
      * @return the InputStream to the requested resource.
      */
-    public InputStream getImage(String imagePath) {
-        return getResource(IMAGE_PATH + imagePath);
+    public InputStream getImageStream(String imagePath) {
+        return getResourceStream(IMAGE_PATH + imagePath);
     }
 
     /**
      * @param audioPath the path to the image
      * @return the InputStream to the requested resource.
      */
-    public InputStream getAudio(String audioPath) {
-        return getResource(AUDIO_PATH + audioPath);
+    public InputStream getAudioStream(String audioPath) {
+        return getResourceStream(AUDIO_PATH + audioPath);
+    }
+
+    /**
+     * @param resourcePath the path to the resource
+     * @return the URL to the requested resource.
+     */
+    public URL getResourceURL(String resourcePath) {
+        return this.getClass().getClassLoader().getResource(resourcePath);
+    }
+
+    /**
+     * @param imagePath the path to the image
+     * @return the URL to the requested resource.
+     */
+    public URL getImageURL(String imagePath) {
+        return getResourceURL(IMAGE_PATH + imagePath);
+    }
+
+    /**
+     * @param audioPath the path to the image
+     * @return the URL to the requested resource.
+     */
+    public URL getAudioURL(String audioPath) {
+        return getResourceURL(AUDIO_PATH + audioPath);
     }
 }

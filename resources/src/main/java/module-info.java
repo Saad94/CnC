@@ -1,4 +1,4 @@
-module resources {
+open module resources {
     requires java.logging;
     exports com.friendos.resources;
 }

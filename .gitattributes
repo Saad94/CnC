@@ -2,3 +2,6 @@
 # to native line endings on checkout.
 * text
 
+*.aud binary
+*.png binary
+*.ttf binary
