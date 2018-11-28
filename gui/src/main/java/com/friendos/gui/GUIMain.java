@@ -16,7 +16,6 @@ public class GUIMain extends Application {
     public static MainMenuScene mainMenuScene;
     public static TestPokemonScene pokemonScene;
     public static TreeTileScene treeScene;
-
     private static AbstractScene currentScene;
     private static MediaPlayer mediaPlayer;
 

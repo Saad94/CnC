@@ -30,7 +30,10 @@ public class TestPokemonScene extends AbstractScene<TestPokemonScene> {
     /**
      * The OnClickHandler for the loadMission button.
      */
-    private EventHandler<MouseEvent> loadMission = mouseEvent -> System.out.println("This should load a mission.");
+    private EventHandler<MouseEvent> loadMission = mouseEvent -> {
+        System.out.println("This should show a lame tree animation.");
+        GUIMain.setCurrentScene(GUIMain.treeScene);
+    };
 
     /**
      * The OnClickHandler for the multiplayerGame button.
