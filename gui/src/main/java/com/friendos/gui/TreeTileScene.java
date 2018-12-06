@@ -1,27 +1,25 @@
 package com.friendos.gui;
 
+import com.friendos.resources.ResourceLoader;
 import javafx.animation.*;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.util.AbstractMap;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.FileFilter;
+import java.net.URI;
+import java.util.*;
 
 import static com.friendos.gui.GUIMain.stage;
 
@@ -68,74 +66,31 @@ class TreeTileScene extends AbstractScene<TreeTileScene> {
 
         // Set the objects in this Scene.
         GridPane grid = createMenuGrid(stage);
-        //===============================
-//        Rectangle rect = new Rectangle (100, 40, 100, 100);
-//        rect.setArcHeight(50);
-//        rect.setArcWidth(50);
-//        rect.setFill(Color.VIOLET);
-//
-//        final Duration SEC_2 = Duration.millis(2000);
-//        final Duration SEC_3 = Duration.millis(3000);
-//
-//        PauseTransition pt = new PauseTransition(Duration.millis(1000));
-//        FadeTransition ft = new FadeTransition(SEC_3);
-//        ft.setFromValue(1.0f);
-//        ft.setToValue(0.3f);
-//        ft.setCycleCount(2);
-//        ft.setAutoReverse(true);
-//        TranslateTransition tt = new TranslateTransition(SEC_2);
-//        tt.setFromX(-100f);
-//        tt.setToX(100f);
-//        tt.setCycleCount(2);
-//        tt.setAutoReverse(true);
-//        RotateTransition rt = new RotateTransition(SEC_3);
-//        rt.setByAngle(180f);
-//        rt.setCycleCount(4);
-//        rt.setAutoReverse(true);
-//        ScaleTransition st = new ScaleTransition(SEC_2);
-//        st.setByX(1.5f);
-//        st.setByY(1.5f);
-//        st.setCycleCount(2);
-//        st.setAutoReverse(true);
 
-        ImageView[] slides = new ImageView[4];
+        //Add all png images
+        ArrayList<Image> temperateTileSetImages = addImages();
 
-        Image image1 = new Image("../../../../resources/src/main/resources/images/main_menu/split20000.png");
-        Image image2 = new Image("../../../../resources/src/main/resources/images/main_menu/split20001.png");
-        Image image3 = new Image("../../../../resources/src/main/resources/images/main_menu/split20002.png");
-        Image image4 = new Image("../../../../resources/src/main/resources/images/main_menu/split20003.png");
-
-        slides[0] = new ImageView(image1);
-        slides[1] = new ImageView(image2);
-        slides[2] = new ImageView(image3);
-        slides[3] = new ImageView(image4);
+        //Assign ImageViews
+        ArrayList<ImageView> temperateTileSetImageViews = assignImageViews(temperateTileSetImages);
 
 
-        HBox root = new HBox();
+        VBox vbox = new VBox();
 
-        root.setAlignment(Pos.TOP_CENTER);
-        SequentialTransition seqT = new SequentialTransition ();
-        for (ImageView slide : slides) {
+        //Include all image views in Hbox
+        HBox box = new HBox();
+        box.setPadding(new Insets(20,20,20,200));
+        box.setAlignment(Pos.BOTTOM_CENTER);
+        box.getChildren().addAll(temperateTileSetImageViews);
+        box.setMaxSize(HBox.USE_PREF_SIZE, HBox.USE_PREF_SIZE);
+        box.setStyle("-fx-background-color: #000000;");
 
-            SequentialTransition sequentialTransition = new SequentialTransition();
-
-            FadeTransition fadeIn = getFadeTransition(slide, 0.0, 1.0, 2000);
-            PauseTransition stayOn = new PauseTransition(Duration.millis(2000));
-            FadeTransition fadeOut = getFadeTransition(slide, 1.0, 0.0, 2000);
-
-            sequentialTransition.getChildren().addAll(fadeIn, stayOn, fadeOut);
-            slide.setOpacity(0);
-            root.getChildren().add(slide);
-            seqT.getChildren().add(sequentialTransition);
-
-        }
-        seqT.play();
+//        grid.setStyle("-fx-background-color: #000000;");
 
 
 
-        root.setPadding(new Insets(75, 25, 25, 25));
-        root.getChildren().addAll(grid);
-        setScene(new Scene(root, getDimensions().getWidth(), getDimensions().getHeight()));
+
+        vbox.getChildren().addAll(grid,box);
+        setScene(new Scene(vbox, getDimensions().getWidth(), getDimensions().getHeight()));
 
         //===============================
 
@@ -143,7 +98,8 @@ class TreeTileScene extends AbstractScene<TreeTileScene> {
         getScene().getStylesheets().add(RESOURCE_LOADER.getStylesheetURL("Tiletest.css").toExternalForm());
 
         // Set the music file for this Scene.
-        setMusic("sounds/Unbeatable.wav");
+        setMusic("sounds/Act On Instinct.mp3");
+
     }
 
     /**
@@ -174,13 +130,54 @@ class TreeTileScene extends AbstractScene<TreeTileScene> {
         }
     }
 
-    public FadeTransition getFadeTransition(ImageView imageView, double fromValue, double toValue, int durationInMilliseconds) {
 
-        FadeTransition ft = new FadeTransition(Duration.millis(durationInMilliseconds), imageView);
-        ft.setFromValue(fromValue);
-        ft.setToValue(toValue);
+    private ArrayList<Image> addImages(){
 
-        return ft;
+        //Doesn't recognize as directory for some reason
+//        String directoryString = RESOURCE_LOADER.getImageURL("main_menu/Temperate tileset").toExternalForm();
+//        File directory2 = new File(directoryString);
+//        System.out.println(directory2.isDirectory());
+
+
+
+        File directory= new File("C:\\Users\\Muhannad\\Desktop\\Personal Coding Projects\\CnC Project [With Saad]\\CnC\\resources\\src\\main\\resources\\images\\main_menu\\Temperate tileset");
+        System.out.println(directory.isDirectory());
+
+
+        //Extract only png's from the folder
+        File [] pngFiles = directory.listFiles(new FileFilter() {
+            public boolean accept(File file) {
+                return file.isFile() && file.getName().toLowerCase().endsWith(".png");
+            }
+        });
+
+        //Convert png's into Images and store in an array
+        ArrayList<Image> pngImages = new ArrayList<>();
+        for (File f: pngFiles){
+            Image image = new Image(f.toURI().toString());
+            pngImages.add(image);
+        }
+
+        System.out.println(pngFiles.length);
+        System.out.println(pngImages.size() + " are the png images!");
+        int fileCount= directory.list().length;
+        System.out.println("File Count:"+fileCount);
+
+        return pngImages;
+
+    }
+
+    private ArrayList<ImageView> assignImageViews(ArrayList<Image> images){
+
+        ArrayList<ImageView> imageViews = new ArrayList<>();
+
+        for (Image i: images){
+            ImageView imageView = new ImageView(i);
+            imageViews.add(imageView);
+        }
+        System.out.println(imageViews.size() + " image views assigned!");
+
+        return imageViews;
 
     }
 
