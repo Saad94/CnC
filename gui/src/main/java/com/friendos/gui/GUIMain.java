@@ -1,5 +1,9 @@
 package com.friendos.gui;
 
+import com.friendos.gui.scenes.AbstractScene;
+import com.friendos.gui.scenes.MainMenuScene;
+import com.friendos.gui.scenes.TestPokemonScene;
+import com.friendos.gui.scenes.TreeTileScene;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.media.Media;
@@ -8,19 +12,20 @@ import javafx.stage.Stage;
 
 public class GUIMain extends Application {
 
-    static Stage stage;
-    static MainMenuScene mainMenuScene;
-    static TestPokemonScene pokemonScene;
-    static AbstractScene currentScene;
+    public static Stage stage;
+    public static MainMenuScene mainMenuScene;
+    public static TestPokemonScene pokemonScene;
+    public static TreeTileScene treeScene;
 
-    static MediaPlayer mediaPlayer;
+    private static AbstractScene currentScene;
+    private static MediaPlayer mediaPlayer;
 
     public static void main(String[] args){
         Application.launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
         // Setup the Stage
         setupStage(primaryStage);
@@ -28,9 +33,10 @@ public class GUIMain extends Application {
         // Create all the Scenes
         mainMenuScene = new MainMenuScene();
         pokemonScene = new TestPokemonScene();
+        treeScene = new TreeTileScene();
 
         // Set the current Scene
-        setCurrentScene(mainMenuScene);
+        setCurrentScene(treeScene);
 
         stage.setTitle("JavaFX on JDK 11");
         stage.show();
@@ -49,7 +55,7 @@ public class GUIMain extends Application {
      * Changes the current running Scene.
      * @param abstractScene the new Scene to be displayed.
      */
-    static void setCurrentScene(AbstractScene abstractScene) {
+    public static void setCurrentScene(AbstractScene abstractScene) {
         currentScene = abstractScene;
 
         // Sets the music for the new currentScene to play.
@@ -68,9 +74,11 @@ public class GUIMain extends Application {
             mediaPlayer.stop();
         }
 
-        mediaPlayer = new MediaPlayer(new Media(currentScene.getMusic().toString()));
-        mediaPlayer.setVolume(0.8);
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        mediaPlayer.play();
+        if (currentScene.getMusic() != null) {
+            mediaPlayer = new MediaPlayer(new Media(currentScene.getMusic().toString()));
+            mediaPlayer.setVolume(0.8);
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            mediaPlayer.play();
+        }
     }
 }

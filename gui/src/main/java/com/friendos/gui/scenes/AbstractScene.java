@@ -1,4 +1,4 @@
-package com.friendos.gui;
+package com.friendos.gui.scenes;
 
 import com.friendos.resources.ResourceLoader;
 import com.google.common.base.MoreObjects;
@@ -7,14 +7,14 @@ import javafx.scene.Scene;
 
 import java.net.URL;
 
-abstract class AbstractScene<T> {
+public abstract class AbstractScene<T> {
 
-    final ResourceLoader RESOURCE_LOADER = ResourceLoader.getInstance();
+    protected final ResourceLoader RESOURCE_LOADER = ResourceLoader.getInstance();
     private final Rectangle2D dimensions;
     private URL music;
     private Scene scene;
 
-    AbstractScene(int x, int y, int w, int h) {
+    public AbstractScene(int x, int y, int w, int h) {
         dimensions = new Rectangle2D(x, y, w, h);
     }
 
