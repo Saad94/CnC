@@ -1,6 +1,9 @@
 package com.friendos.resources;
 
+import java.io.File;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.logging.Logger;
 
@@ -116,5 +119,55 @@ public class ResourceLoader {
      */
     public URL getStylesheetURL(String stylesheetPath) {
         return getResourceURL(STYLESHEET_PATH + stylesheetPath);
+    }
+
+    /**
+     * @param directoryPath the path to the directory
+     * @return the File object for the requested directory.
+     */
+    private File getResourceDirectory(String directoryPath) {
+        try {
+            File file = new File(getResourceURL(directoryPath).toURI());
+
+            if (!file.isDirectory()) {
+                throw new DirectoryNotFoundException(String.format("The Resource at <%s> is not a directory.", directoryPath));
+            }
+
+            return file;
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * @param audioDirectoryPath the path to the directory
+     * @return the File object for the requested directory.
+     */
+    public File getAudioDirectory(String audioDirectoryPath) {
+        return getResourceDirectory(AUDIO_PATH + audioDirectoryPath);
+    }
+
+    /**
+     * @param fontDirectoryPath the path to the directory
+     * @return the File object for the requested directory.
+     */
+    public File getFontDirectory(String fontDirectoryPath) {
+        return getResourceDirectory(FONT_PATH + fontDirectoryPath);
+    }
+
+    /**
+     * @param imageDirectoryPath the path to the directory
+     * @return the File object for the requested directory.
+     */
+    public File getImageDirectory(String imageDirectoryPath) {
+        return getResourceDirectory(IMAGE_PATH + imageDirectoryPath);
+    }
+
+    /**
+     * @param stylesheetDirectoryPath the path to the directory
+     * @return the File object for the requested directory.
+     */
+    public File getStylesheetDirectory(String stylesheetDirectoryPath) {
+        return getResourceDirectory(STYLESHEET_PATH + stylesheetDirectoryPath);
     }
 }

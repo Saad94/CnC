@@ -1,5 +1,6 @@
-package com.friendos.gui;
+package com.friendos.gui.scenes;
 
+import com.friendos.gui.GUIMain;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 import static com.friendos.gui.GUIMain.stage;
 
-class TestPokemonScene extends AbstractScene<TestPokemonScene> {
+public class TestPokemonScene extends AbstractScene<TestPokemonScene> {
 
     /**
      * The OnClickHandler for the startNewGame button.
@@ -54,7 +55,7 @@ class TestPokemonScene extends AbstractScene<TestPokemonScene> {
     /**
      * The constructor for this class.
      */
-    TestPokemonScene() {
+    public TestPokemonScene() {
         super(0, 0, 1024, 640);
 
         // Set the objects in this Scene.

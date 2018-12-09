@@ -1,5 +1,6 @@
-package com.friendos.gui;
+package com.friendos.gui.scenes;
 
+import com.friendos.gui.GUIMain;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 import static com.friendos.gui.GUIMain.stage;
 
-class MainMenuScene extends AbstractScene<MainMenuScene> {
+public class MainMenuScene extends AbstractScene<MainMenuScene> {
 
     /**
      * The OnClickHandler for the startNewGame button.
@@ -54,7 +55,7 @@ class MainMenuScene extends AbstractScene<MainMenuScene> {
     /**
      * The constructor for this class.
      */
-    MainMenuScene() {
+    public MainMenuScene() {
         super(0, 0, 1024, 640);
 
         // Set the objects in this Scene.
@@ -78,16 +79,15 @@ class MainMenuScene extends AbstractScene<MainMenuScene> {
         gridPane.setHgap(10);
         gridPane.setVgap(20);
         gridPane.setPadding(new Insets(75, 25, 25, 25));
-        createLabels(stage, gridPane);
+        createLabels(gridPane);
 
         return gridPane;
     }
 
     /**
-     * @param stage the stage on which this Scene will be displayed.
      * @param gridPane the GridPane in which the Labels will live
      */
-    private void createLabels(Stage stage, GridPane gridPane) {
+    private void createLabels(GridPane gridPane) {
         for (int i = 0; i < LABELS.size(); i++) {
             Label label = new Label(LABELS.get(i).getKey());
             label.setOnMouseClicked(LABELS.get(i).getValue());
