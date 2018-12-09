@@ -1,8 +1,5 @@
-package com.friendos.core;
+package com.friendos.models;
 
 public class Test {
 
-    public static String doSomeCoolStuff(){
-        return "I am Cool Dude!";
-    }
 }
